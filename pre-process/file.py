@@ -18,3 +18,8 @@ def read_file(path):
 def write_file(path, data):
     file = open(path, 'w', encoding='utf-8')
     file.write(data)
+
+
+def write_json(path, data):
+    file = open(path, "w", encoding='utf-8')
+    json.dump(data, file)

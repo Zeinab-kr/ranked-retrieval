@@ -10,11 +10,17 @@ reduced = False
 
 def preprocess():
     data = file.open_json("../data/IR_data_news_12k.json")
-    if not os.path.exists("../data/normalized_text.txt"):
+    if os.path.exists("../data/normalized_text.txt"):
+        normalized_data = file.read_file("../data/normalized_text.txt")
+    else:
         normalized_data = normal.normalize_text(data)
 
+    if os.path.exists("../data/tokens.json"):
+        tokens = file.open_json("../data/tokens.json")
+    else:
+        tokens = WordTokenizer().tokenize(normalized_data)
+        file.write_json("../data/tokens.json", tokens)
 
-
-    # tokens = WordTokenizer().tokenize(normalized_data)
+    
     # reduction.delete_punctuations(tokens)
     # reduction.find_stop_words(tokens)
