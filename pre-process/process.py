@@ -1,9 +1,6 @@
 import file
 import normal
-from hazm import WordTokenizer
 import os
-import tokenize
-import reduction
 
 reduced = False
 
@@ -13,14 +10,17 @@ def preprocess():
     if os.path.exists("../data/normalized_text.txt"):
         normalized_data = file.read_file("../data/normalized_text.txt")
     else:
+        print("normalizing...")
         normalized_data = normal.normalize_text(data)
+        print("normalization done!")
 
     if os.path.exists("../data/tokens.json"):
         tokens = file.open_json("../data/tokens.json")
     else:
-        tokens = WordTokenizer().tokenize(normalized_data)
+        print("tokenizing...")
+        tokens = normalized_data.split(" .،؛:)(/!؟@#%^&*$[]}{")
         file.write_json("../data/tokens.json", tokens)
+        print("tokenization done!")
 
 
-    # reduction.delete_punctuations(tokens)
     # reduction.find_stop_words(tokens)

@@ -9,10 +9,3 @@ def find_stop_words(tokens):
     for token in occurrence:
         print(token)
 
-
-def delete_punctuations(tokens):
-    text = file.read_file("../data/punctuations.txt")
-    punctuations = WordTokenizer().tokenize(text)
-    for token in tokens:
-        if token in punctuations:
-            tokens.remove(token)
