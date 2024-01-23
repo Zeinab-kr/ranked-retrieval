@@ -2,8 +2,6 @@ import file
 import json
 from hazm import Normalizer
 
-normalized = False
-
 
 def normalize_text(text):
     contents = " "
@@ -12,12 +10,7 @@ def normalize_text(text):
 
     normalizer = Normalizer()
     contents = normalizer.normalize(contents)
-    file.write_file("../data/normalized_text.txt", contents)
-    # if normalization is done, normalized = True
-    set_flag(True)
+    addr = "../data/normalized_text.txt"
+    file.write_file(addr, contents)
     return contents
 
-
-def set_flag(state):
-    global normalized
-    normalized = state
