@@ -6,6 +6,7 @@ from hazm import Normalizer
 def normalize_text(text):
     contents = " "
     for i in text:
+        contents += " "
         contents += text[i]['content']  # read just contents of files
 
     normalizer = Normalizer()
