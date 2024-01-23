@@ -21,6 +21,6 @@ def preprocess():
         tokens = WordTokenizer().tokenize(normalized_data)
         file.write_json("../data/tokens.json", tokens)
 
-    
+
     # reduction.delete_punctuations(tokens)
     # reduction.find_stop_words(tokens)

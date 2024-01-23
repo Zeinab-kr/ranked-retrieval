@@ -2,14 +2,14 @@ import json
 
 
 def open_json(path):
-    file = open(path, 'r')
+    file = open(path, 'r', encoding='utf-8')
     data = json.load(file)
     file.close()
     return data
 
 
 def read_file(path):
-    file = open(path, 'r')
+    file = open(path, 'r', encoding='utf-8')
     data = file.read()
     file.close()
     return data
