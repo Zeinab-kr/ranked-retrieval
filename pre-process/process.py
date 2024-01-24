@@ -16,6 +16,7 @@ def preprocess():
     tokens = reduction.remove_duplicates(tokens)
     tokens = reduction.remove_punctuations(tokens)
     tokens = reduction.remove_stopwords(tokens)
+    tokens = reduction.lemma_tokens(tokens)
 
     for i in range(100):
-        print(tokens[i])
+        print(token[i])

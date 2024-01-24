@@ -62,11 +62,16 @@ def remove_stopwords(tokens):
         tokens_num += count
 
     result = []
+    stopwords = []
     for (item, count) in tokens:
         if (count / tokens_num * 100) > 0.1:
+            stopwords.append((item, count))
             continue
 
         result.append((item, count))
+
+    # for (word, count) in stopwords:
+    #     print("({}: {})".format(word, count))
 
     print("stopwords removed")
     return result
