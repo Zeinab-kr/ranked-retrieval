@@ -1,3 +1,4 @@
+import os.path
 from collections import Counter
 from hazm import WordTokenizer
 import file
@@ -12,15 +13,28 @@ def find_stop_words(tokens):
         print(token)
 
 
-def delete_punctuations(tokens):
+def remove_punctuations(tokens):
+    if os.path.exists("../data/no_punc_tokens.json"):
+        print("punctuations removed already")
+        return file.open_json("../data/no_punc_tokens.json")
+
     text = file.read_file("../data/punctuations.txt")
     punctuations = WordTokenizer().tokenize(text)
     print("deleting punctuations...")
-    for punc in punctuations:
-        if punc in tokens:
-            for token in tokens:
-                tokens.remove(punc)
+    result = [(item, count) for item, count in tokens if item not in punctuations]
 
+    file.write_json("../data/no_punc_tokens.json", tokens)
     print("punctuations removed!")
+    return result
 
 
+# removes duplicates and adds a count element for each token
+def remove_duplicates(tokens):
+    if os.path.exists("../data/tokens_with_count.json"):
+        print("removed duplicates already")
+        return file.open_json("../data/tokens_with_count.json")
+
+    print("removing duplicates...")
+    result = Counter(tokens).most_common()
+    file.write_json("../data/tokens_with_count.json", result)
+    return result

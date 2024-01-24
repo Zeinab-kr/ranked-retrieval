@@ -1,4 +1,3 @@
-from collections import Counter
 import file
 import normal
 import reduction
@@ -14,8 +13,11 @@ def preprocess():
 
     normalized_data = normal.normalize_text(data)
     tokens = tokenizer.tokenize(normalized_data)
+    freq_tokens = reduction.remove_duplicates(tokens)
+    no_punc_tokens = reduction.remove_punctuations(freq_tokens)
 
-    freq_tokens = Counter(tokens).most_common()
+    for i in range(100):
+        print(no_punc_tokens[i])
 
     # if os.path.exists("../data/no_punc_tokens.json"):
     #     print("punctuations removed already")
