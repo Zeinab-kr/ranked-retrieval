@@ -1,6 +1,6 @@
 import os
 
-import file
+from file import *
 import json
 from hazm import Normalizer
 
@@ -8,7 +8,7 @@ from hazm import Normalizer
 def normalize_text(text):
     if os.path.exists("../data/normalized_text.txt"):
         print("normalized already!")
-        return file.read_file("../data/normalized_text.txt")
+        return read_file("../data/normalized_text.txt")
 
     print("normalizing...")
     contents = " "
@@ -19,7 +19,7 @@ def normalize_text(text):
     normalizer = Normalizer()
     contents = normalizer.normalize(contents)
     addr = "../data/normalized_text.txt"
-    file.write_file(addr, contents)
+    write_file(addr, contents)
     print("normalization done!")
     return contents
 
