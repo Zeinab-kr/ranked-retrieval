@@ -1,26 +1,27 @@
+from collections import Counter
 import file
 import normal
-import os
+import reduction
+import tokenizer
 
 reduced = False
 
 
 def preprocess():
+    print("opening file...")
     data = file.open_json("../data/IR_data_news_12k.json")
-    if os.path.exists("../data/normalized_text.txt"):
-        normalized_data = file.read_file("../data/normalized_text.txt")
-    else:
-        print("normalizing...")
-        normalized_data = normal.normalize_text(data)
-        print("normalization done!")
+    print("file opened. Processing data...")
 
-    if os.path.exists("../data/tokens.json"):
-        tokens = file.open_json("../data/tokens.json")
-    else:
-        print("tokenizing...")
-        tokens = normalized_data.split(" .،؛:)(/!؟@#%^&*$[]}{")
-        file.write_json("../data/tokens.json", tokens)
-        print("tokenization done!")
+    normalized_data = normal.normalize_text(data)
+    tokens = tokenizer.tokenize(normalized_data)
 
+    freq_tokens = Counter(tokens).most_common()
 
+    # if os.path.exists("../data/no_punc_tokens.json"):
+    #     print("punctuations removed already")
+    # else:
+    #     reduction.delete_punctuations(tokens)
+    #     file.write_json("../data/no_punc_tokens.json", tokens)
+    #
+    # os.system('cls')
     # reduction.find_stop_words(tokens)
