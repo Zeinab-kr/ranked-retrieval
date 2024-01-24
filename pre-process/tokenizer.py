@@ -10,7 +10,7 @@ def tokenize(text):
         return file.open_json("../data/tokens.json")
 
     print("tokenizing...")
-    tokens = WordTokenizer(join_verb_parts=True, replace_numbers=True, replace_emails=True,
+    tokens = WordTokenizer(join_verb_parts=True, replace_emails=True,
                            replace_ids=True, replace_links=True).tokenize(text)
     file.write_json("../data/tokens.json", tokens)
     print("tokenization done!")
