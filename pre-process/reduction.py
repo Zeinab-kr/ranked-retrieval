@@ -1,9 +1,13 @@
 import os.path
 from collections import Counter
 from hazm import WordTokenizer
+from hazm import Stemmer
 from hazm import Lemmatizer
 import file
 
+tokenizer = WordTokenizer()
+lemmatizer = Lemmatizer()
+stemmer = Stemmer()
 
 def remove_punctuations(tokens):
     if os.path.exists("../data/no_punc_tokens.json"):
@@ -11,7 +15,7 @@ def remove_punctuations(tokens):
         return file.open_json("../data/no_punc_tokens.json")
 
     text = file.read_file("../data/punctuations.txt")
-    punctuations = WordTokenizer().tokenize(text)
+    punctuations = tokenizer.tokenize(text)
     print("deleting punctuations...")
     result = [(item, count) for item, count in tokens if item not in punctuations]
 
@@ -44,15 +48,22 @@ def remove_numbers(tokens):
     return result
 
 
-def lemma_tokens(tokens):
-    if os.path.exists("../data/lemmatized_tokens.json"):
-        print("lemmatized already")
-        return file.open_json("../data/lemmatized_tokens.json")
+def stem_tokens(tokens):
+    if os.path.exists("../data/stemmized_tokens.json"):
+        print("stemmized already!")
+        return file.open_json("../data/stemmized_tokens.json")
 
-    print("lemmatizing tokens...")
-    lemmatized = [(Lemmatizer().lemmatize(item), count) for item, count in tokens]
-    # file.write_json('../data/lemmatized_tokens.json')
-    return lemmatized
+    print("stemmizing tokens...")
+    stemmized = []
+    for token in tokens:
+        if 'ها' in token:
+            stemmized.append(stemmer.stem(token))
+            continue
+
+        stemmized.append(token)
+    file.write_json('../data/stemmized_tokens.json', stemmized)
+    print("stemmized tokens")
+    return stemmized
 
 
 def remove_stopwords(tokens):
@@ -70,8 +81,23 @@ def remove_stopwords(tokens):
 
         result.append((item, count))
 
-    # for (word, count) in stopwords:
-    #     print("({}: {})".format(word, count))
+    stop_count = 0
+    for (word, count) in stopwords:
+        print("({}: {})".format(word, count))
+        stop_count += count
 
+    print("Total number of stopwords: {}".format(stop_count))
     print("stopwords removed")
     return result
+
+
+def lemma_tokens(tokens):
+    if os.path.exists("../data/lemmatized_tokens.json"):
+        print("already lemmatized tokens!")
+        return file.open_json("../data/lemmatized_tokens.json")
+
+    print("lemmatizing tokens...")
+    lemmatized = [lemmatizer.lemmatize(token) for token in tokens]
+    file.write_json("../data/lemmatized_tokens.json", lemmatized)
+    print("lemmatized tokens!")
+    return lemmatized

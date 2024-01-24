@@ -13,10 +13,11 @@ def preprocess():
 
     normalized_data = normal.normalize_text(data)
     tokens = tokenizer.tokenize(normalized_data)
+    tokens = reduction.lemma_tokens(tokens)
     tokens = reduction.remove_duplicates(tokens)
     tokens = reduction.remove_punctuations(tokens)
     tokens = reduction.remove_stopwords(tokens)
-    tokens = reduction.lemma_tokens(tokens)
 
-    for i in range(100):
-        print(token[i])
+
+
+
