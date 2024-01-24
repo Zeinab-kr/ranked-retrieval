@@ -1,16 +1,8 @@
 import os.path
 from collections import Counter
 from hazm import WordTokenizer
+from hazm import Lemmatizer
 import file
-
-
-def find_stop_words(tokens):
-    token_num = 0
-    print("most common...")
-    occurrence = Counter(tokens).most_common(50)
-    print("most common done!")
-    for token in occurrence:
-        print(token)
 
 
 def remove_punctuations(tokens):
@@ -23,7 +15,7 @@ def remove_punctuations(tokens):
     print("deleting punctuations...")
     result = [(item, count) for item, count in tokens if item not in punctuations]
 
-    file.write_json("../data/no_punc_tokens.json", tokens)
+    file.write_json("../data/no_punc_tokens.json", result)
     print("punctuations removed!")
     return result
 
@@ -49,4 +41,32 @@ def remove_numbers(tokens):
     result = [(item, count) for item, count in tokens if not (item.isdigit() or item == 'NUM' or item == 'NUMF')]
     file.write_json('../data/no_num_punc_dup.json', result)
     print("numbers removed")
+    return result
+
+
+def lemma_tokens(tokens):
+    if os.path.exists("../data/lemmatized_tokens.json"):
+        print("lemmatized already")
+        return file.open_json("../data/lemmatized_tokens.json")
+
+    print("lemmatizing tokens...")
+    lemmatized = [(Lemmatizer().lemmatize(item), count) for item, count in tokens]
+    # file.write_json('../data/lemmatized_tokens.json')
+    return lemmatized
+
+
+def remove_stopwords(tokens):
+    print("removing stopwords...")
+    tokens_num = 0
+    for (item, count) in tokens:
+        tokens_num += count
+
+    result = []
+    for (item, count) in tokens:
+        if (count / tokens_num * 100) > 0.1:
+            continue
+
+        result.append((item, count))
+
+    print("stopwords removed")
     return result
