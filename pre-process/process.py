@@ -18,6 +18,4 @@ def preprocess():
     tokens = reduction.remove_punctuations(tokens)
     tokens = reduction.remove_stopwords(tokens)
 
-
-
-
+    return tokens
