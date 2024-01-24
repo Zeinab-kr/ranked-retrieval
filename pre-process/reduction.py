@@ -38,3 +38,15 @@ def remove_duplicates(tokens):
     result = Counter(tokens).most_common()
     file.write_json("../data/tokens_with_count.json", result)
     return result
+
+
+def remove_numbers(tokens):
+    if os.path.exists("../data/no_num_punc_dup.json"):
+        print("removed numbers already")
+        return file.open_json("../data/no_num_punc_dup.json")
+
+    print("removing numbers...")
+    result = [(item, count) for item, count in tokens if not (item.isdigit() or item == 'NUM' or item == 'NUMF')]
+    file.write_json('../data/no_num_punc_dup.json', result)
+    print("numbers removed")
+    return result

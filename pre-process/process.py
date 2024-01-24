@@ -13,11 +13,13 @@ def preprocess():
 
     normalized_data = normal.normalize_text(data)
     tokens = tokenizer.tokenize(normalized_data)
-    freq_tokens = reduction.remove_duplicates(tokens)
-    no_punc_tokens = reduction.remove_punctuations(freq_tokens)
+    tokens = reduction.remove_duplicates(tokens)
+    tokens = reduction.remove_punctuations(tokens)
+    tokens = reduction.remove_numbers(tokens)
+
 
     for i in range(100):
-        print(no_punc_tokens[i])
+        print(tokens[i])
 
     # if os.path.exists("../data/no_punc_tokens.json"):
     #     print("punctuations removed already")
