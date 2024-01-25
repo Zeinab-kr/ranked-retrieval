@@ -1,9 +1,7 @@
 from file import open_json
 from normal import *
 from reduction import *
-from tokenizer import *
-
-reduced = False
+from tokenizer import tokenize
 
 
 def preprocess():
@@ -12,10 +10,12 @@ def preprocess():
     print("file opened. Processing data...")
 
     normalized_data = normalize_text(data)
-    tokens = tokenizer.tokenize(normalized_data)
+    tokens = tokenize(normalized_data)
     tokens = lemma_tokens(tokens)
     tokens = remove_duplicates(tokens)
     tokens = remove_punctuations(tokens)
     tokens = remove_stopwords(tokens)
+
+    write_json("../data/final_tokens.json", tokens)
 
     return tokens

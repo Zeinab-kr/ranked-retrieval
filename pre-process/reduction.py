@@ -69,7 +69,10 @@ def lemma_tokens(tokens):
         return open_json("../data/lemmatized_tokens.json")
 
     print("lemmatizing tokens...")
-    lemmatized = [lemmatizer.lemmatize(token) for token in tokens]
+    text = []
+    for token in tokens:
+        text.extend(token)
+    lemmatized = [lemmatizer.lemmatize(token) for token in text]
     write_json("../data/lemmatized_tokens.json", lemmatized)
     print("lemmatized tokens!")
     return lemmatized
