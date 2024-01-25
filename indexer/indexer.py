@@ -1,17 +1,17 @@
-from file import *
+from preprocess import file
 from token import *
 import os
 
-data = open_json("../data/tokens.json")
+data = file.open_json("../data/tokens.json")
 
 
 def make_index():
     tokens = []
     if os.path.exists("../data/indexes.json"):
-        tokens = open_json("../data/indexes.json")
+        tokens = file.open_json("../data/indexes.json")
         return tokens
 
-    words = open_json("../data/final_tokens.json")
+    words = file.open_json("../data/final_tokens.json")
     for word, count in words:
         tokens.append(Token(word, count, find_in_file(word)))
 
