@@ -34,8 +34,7 @@ def tokenize(data):
     tokens = sort_tokens(tokens)
     tokens = remove_punc(tokens)
     write_json("../data/tokens.json", tokens)
-    for i in range(100):
-        print(tokens[i])
+    write_file("../data/number_of_docs.txt", str(len(data)))
 
     print("tokenization done!")
     return raw_tokens
