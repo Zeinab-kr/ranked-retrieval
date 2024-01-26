@@ -1,4 +1,7 @@
 from document_class import *
+from preprocess import file
+
+doc_count = int(file.read_file("../data/number_of_docs.txt"))
 
 
 # ye token ya term ya kalame tarif mikone, tedad kalame too kole doc-H ro migire save mikone
@@ -8,6 +11,7 @@ class Token:
         self.token = str(token)
         self.tf = tf
         self.docs = []
+        self.docs.extend([Document] * doc_count)
 
     def add_doc(self, doc):
         self.docs[doc] = Document(doc)
@@ -20,9 +24,6 @@ class Token:
 
     def increment_weight(self, doc_id):
         self.docs[doc_id].increment_weight()
-
-    def extend_array(self, num):
-        self.docs.extend([None] * (num+1))
 
     def set_tf(self, tf):
         self.tf = tf
