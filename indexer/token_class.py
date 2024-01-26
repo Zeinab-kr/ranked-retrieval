@@ -3,27 +3,31 @@ from preprocess import file
 
 doc_count = int(file.read_file("../data/number_of_docs.txt"))
 
-
-# ye token ya term ya kalame tarif mikone, tedad kalame too kole doc-H ro migire save mikone
-# ye list as doc-hayee ke kalame ro daran dare
 class Token:
     def __init__(self, token, tf):
         self.token = str(token)
         self.tf = tf
         self.docs = []
-        self.docs.extend([Document] * doc_count)
+        self.df = 1
 
     def add_doc(self, doc):
-        self.docs[doc] = Document(doc)
+        self.docs.append(Document(doc))
+        return len(self.docs) - 1
 
-    def add_posting_to_doc(self, doc_id, posting):
-        self.docs[doc_id].add_posting(posting)
+    def add_posting_to_doc(self, index, posting):
+        self.docs[index].add_posting(posting)
 
-    def set_weight(self, doc_id, weight):
-        self.docs[doc_id].set_weight(weight)
+    def set_weight(self, index, weight):
+        self.docs[index].set_weight(weight)
 
-    def increment_weight(self, doc_id):
-        self.docs[doc_id].increment_weight()
+    def increment_weight(self, index):
+        self.docs[index].increment_weight()
+
+    def increment_df(self):
+        self.df = self.df + 1
+
+    def set_df(self, df):
+        self.df = df
 
     def set_tf(self, tf):
         self.tf = tf
@@ -39,3 +43,10 @@ class Token:
 
     def get_docs(self):
         return self.docs
+
+    def get_serializable_docs(self):
+        result = []
+        for doc in self.docs:
+            result.append(doc.get_serializable_doc())
+
+        return result

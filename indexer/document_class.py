@@ -1,6 +1,3 @@
-# miyad ye doc tarif mikone, vazne kalame too doco migire
-# ye araye ham dare ke position-haye kalame too doc toosh save mishe
-
 class Document:
     def __init__(self, doc_id):
         self.doc_id = doc_id
@@ -18,3 +15,10 @@ class Document:
 
     def get_weight(self):
         return self.weight
+
+    def get_serializable_doc(self):
+        return {
+            "doc_id": self.doc_id,
+            "weight": self.weight,
+            "positions": self.positions
+        }
