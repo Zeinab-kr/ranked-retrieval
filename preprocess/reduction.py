@@ -18,7 +18,13 @@ def remove_punctuations(tokens):
     text = read_file("../data/punctuations.txt")
     punctuations = tokenizer.tokenize(text)
     print("deleting punctuations...")
-    result = [(item, count) for item, count in tokens if item not in punctuations]
+    result = []
+    flag = 0
+    for token in tokens:
+        if token[0] in punctuations:
+            continue
+
+        result.append(token)
 
     write_json("../data/no_punc_tokens.json", result)
     print("removed punctuations!")
@@ -32,34 +38,41 @@ def remove_duplicates(tokens):
         return open_json("../data/tokens_with_count.json")
 
     print("removing duplicates...")
-    result = Counter(tokens).most_common()
+    data = []
+    for word, i, j in tokens:
+        data.append(word)
+
+    result = Counter(data).most_common()
     write_json("../data/tokens_with_count.json", result)
     print("removed duplicates!")
     return result
 
 
-def remove_stopwords(tokens):
+def find_stopwords(tokens):
     print("removing stopwords...")
     tokens_num = 0
     for (item, count) in tokens:
         tokens_num += count
 
-    result = []
     stopwords = []
-    for (item, count) in tokens:
-        if (count / tokens_num * 100) > 0.1:
-            stopwords.append((item, count))
+    for token in tokens:
+        if (token[1] / tokens_num * 100) > 0.1:  # token[1] -> count of token
+            stopwords.append(token)
+
+    write_file("../data/number_of_tokens.txt", str(tokens_num))
+    return stopwords
+
+
+def remove_stopwords(stopwords, tokens):
+    result = []
+    for token in tokens:
+        if token[0] in stopwords:
             continue
 
-        result.append((item, count))
+        result.append(token)
 
-    # stop_count = 0
-    # for (word, count) in stopwords:
-    #     print("({}: {})".format(word, count))
-    #     stop_count += count
-
-    # print("Total number of stopwords: {}".format(stop_count))
     print("removed stopwords!")
+
     return result
 
 
@@ -69,10 +82,10 @@ def lemma_tokens(tokens):
         return open_json("../data/lemmatized_tokens.json")
 
     print("lemmatizing tokens...")
-    text = []
-    for token in tokens:
-        text.extend(token)
-    lemmatized = [lemmatizer.lemmatize(token) for token in text]
+    lemmatized = []
+    for word, i, j in tokens:
+        lemmatized.append((lemmatizer.lemmatize(word), i, j))
+
     write_json("../data/lemmatized_tokens.json", lemmatized)
     print("lemmatized tokens!")
     return lemmatized
