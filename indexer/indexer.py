@@ -1,4 +1,4 @@
-import bisect
+import heapq
 
 from preprocess import file
 from token_class import Token
@@ -45,9 +45,12 @@ def make_index():
 
             tokens[counter].add_posting_to_doc(index, posting)
         else:  # if words aren't the same
+            weights = [(doc.doc_id, doc.weight) for doc in tokens[counter].docs]
+            champion = heapq.nlargest(20, weights, key=lambda x: x[1])
             serializable.append({"token": tokens[counter].token,
                                  "tf": tokens[counter].tf,
                                  "df": tokens[counter].df,
+                                 "champion": champion,
                                 "docs": tokens[counter].get_serializable_docs()})
 
             if counter % 1000 == 0:
@@ -59,9 +62,12 @@ def make_index():
             tokens[counter].set_weight(index, 1)
             tokens[counter].add_posting_to_doc(index, posting)
 
+    weights = [(doc.doc_id, doc.weight) for doc in tokens[counter-1].docs]
+    champion = heapq.nlargest(20, weights, key=lambda x: x[1])
     serializable.append({"token": tokens[counter-1].token,
                          "tf": tokens[counter-1].tf,
                          "df": tokens[counter-1].df,
+                         "champion": champion,
                         "postings_list": tokens[counter-1].get_serializable_docs()})
     file.write_json("../data/inverted_index.json", serializable)
     print("made indexes!")

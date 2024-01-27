@@ -3,12 +3,14 @@ from preprocess import file
 
 doc_count = int(file.read_file("../data/number_of_docs.txt"))
 
+
 class Token:
     def __init__(self, token, tf):
         self.token = str(token)
         self.tf = tf
         self.docs = []
         self.df = 1
+        self.champion = []
 
     def add_doc(self, doc):
         self.docs.append(Document(doc))
