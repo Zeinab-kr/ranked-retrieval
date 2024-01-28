@@ -38,11 +38,15 @@ def preprocess():
     tokens = sorted(tokens, key=persian_sort_key)
     count_tokens = sorted(count_tokens, key=persian_sort_key)
     print("sorting done!")
+    print("preprocessing done!")
+    end_time = time.time()
+    print("time: {}".format(int(end_time - start_time)))
+    print("saving data...")
     write_json("../data/tokens.json", tokens)
     write_json("../data/tokens_with_count.json", count_tokens)
     write_file("../data/number_of_docs.txt", str(len(normalized_data)))
-    end_time = time.time()
-    print("time: {}".format(int(end_time - start_time)))
+
+
 
 
 def persian_sort_key(t):
