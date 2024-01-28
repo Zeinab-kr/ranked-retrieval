@@ -10,8 +10,10 @@ number_of_docs = int(file.read_file("../data/number_of_docs.txt"))
 
 def doc_to_vector(word):
     word_index = binary_search(word)
+    if word_index == -1:
+        return []
     df = word_index["df"]
-    idf = number_of_docs // df
+    idf = math.log10(number_of_docs // df)
     docs = word_index["docs"]  # {"doc_id", "weight", "positions"}
     result = []
     for doc in docs:

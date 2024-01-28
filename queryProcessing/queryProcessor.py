@@ -21,8 +21,6 @@ def preprocess_query(query):
     query = [lemmatizer.lemmatize(word) for word in query]
     query = [item for item in query if item not in punctuations]
     query = [item for item in query if item not in stopwords]
-    for word in query:
-        print(word)
     return query
 
 
@@ -41,15 +39,16 @@ def process_query(query):
 
 def cosine_value(query_vector, doc_vectors):
     docs = {}
-    for word, doc_id, tf_idf in doc_vectors:
+    for word, doc_id, tf_idf in doc_vectors:  # dictionary representation of doc_vectors
         docs[doc_id] = {word: tf_idf}
 
-    dot_products = {}
     query_vector_size = 0
     for word, tf in query_vector:
         query_vector_size += (tf * tf)
 
     query_vector_size = query_vector_size ** 0.5
+
+    dot_products = {}
     doc_vectors_size = {}
     for doc_id in docs:
         doc_vectors_size[doc_id] = 0
@@ -67,6 +66,6 @@ def cosine_value(query_vector, doc_vectors):
 
     similarity = {}
     for doc_id in dot_products:
-        similarity[doc_id] = dot_products[doc_id] / (doc_vectors_size[doc_id] * query_vector_size)
+        similarity[doc_id] = dot_products[doc_id] # / (doc_vectors_size[doc_id] * query_vector_size)
 
     return similarity  # {doc_id: cosine_value}
