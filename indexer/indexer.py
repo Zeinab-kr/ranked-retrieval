@@ -1,4 +1,5 @@
 import heapq
+import time
 
 from preprocess import file
 from token_class import Token
@@ -8,43 +9,41 @@ import os
 def make_index():
     tokens = []
     print("reading files...")
-    if os.path.exists("../data/inverted_index.json"):
-        tokens = file.open_json("../data/inverted_index.json")
-        print(len(tokens))
-        return tokens
-
     words = file.open_json("../data/tokens_with_count.json")  # (word, term_frequency)
     data = file.open_json("../data/tokens.json")  # (word, doc_id, posting)
     print("making indexes...")
 
+    start_time = time.time()
+
     serializable = []
     counter = 0
     tokens.extend([Token])  # extend array by one
-    tokens[0] = Token(words[0][0], words[0][1])  # set word and tf
-    index = tokens[0].add_doc(data[0][1])  # data[0][1] -> doc_id
-    tokens[0].set_weight(index, 1)
-    tokens[0].add_posting_to_doc(index, data[0][2])
-    print(len(data))
-    print(len(words))
+    word = words[0][0]
+    tf = words[0][1]
+    doc_id = data[0][1]
+    posting = data[0][2]
+    tokens[0] = Token(word, tf)  # set word and tf
+    index = tokens[0].add_doc(doc_id)  # data[0][1] -> doc_id , returns index of added doc
+    tokens[0].set_weight(index, 1)  # set weight of word in doc to 1
+    tokens[0].add_posting_to_doc(index, posting)  # add posting
 
     # data: (word, doc_id, posting)   words: (word, tf)
     for i in range(1, len(data)):
         if counter == (len(words) - 1):
             break
 
-        word = data[i][0]
-        doc_id = data[i][1]
-        posting = data[i][2]
+        word, doc_id, posting = data[i]
         if word == data[i - 1][0]:  # if words are the same
-            if doc_id == data[i - 1][1]:  # if focs are the same
-                tokens[counter].increment_weight(index)
+            if doc_id == data[i - 1][1]:  # if docs are the same
+                tokens[counter].increment_weight(index)  # increment weight in doc
             else:  # if docs aren't the same
-                index = tokens[counter].add_doc(doc_id)
-                tokens[counter].set_weight(index, 1)
-                tokens[counter].increment_df()
+                index = tokens[counter].add_doc(doc_id)  # add the new doc
+                tokens[counter].set_weight(index, 1)  # set weight in doc to 1
+                tokens[counter].increment_df()  # increment document frequency
 
             tokens[counter].add_posting_to_doc(index, posting)
         else:  # if words aren't the same
+            # save data of the previous word in json serializable format
             weights = [(doc.doc_id, doc.weight) for doc in tokens[counter].docs]
             champion = heapq.nlargest(20, weights, key=lambda x: x[1])
             serializable.append({"token": tokens[counter].token,
@@ -69,6 +68,9 @@ def make_index():
                          "df": tokens[counter-1].df,
                          "champion": champion,
                         "postings_list": tokens[counter-1].get_serializable_docs()})
-    file.write_json("../data/inverted_index.json", serializable)
+
     print("made indexes!")
-    return tokens
+    end_time = time.time()
+    print("time: {}".format(int(end_time - start_time)))
+    print("saving data...")
+    file.write_json("../data/inverted_index.json", serializable)

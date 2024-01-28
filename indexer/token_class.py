@@ -28,27 +28,12 @@ class Token:
     def increment_df(self):
         self.df = self.df + 1
 
-    def set_df(self, df):
-        self.df = df
-
     def set_tf(self, tf):
         self.tf = tf
-
-    def get_tf(self):
-        return self.tf
-
-    def get_token(self):
-        return self.token
 
     def get_weight_in_doc(self, doc_index):
         return self.docs[doc_index].get_weight()
 
-    def get_docs(self):
-        return self.docs
-
     def get_serializable_docs(self):
-        result = []
-        for doc in self.docs:
-            result.append(doc.get_serializable_doc())
-
+        result = [doc.get_serializable_doc() for doc in self.docs]
         return result
