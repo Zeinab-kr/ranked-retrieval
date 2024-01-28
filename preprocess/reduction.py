@@ -57,8 +57,9 @@ def find_stopwords(tokens):
     stopwords = []
     for token in tokens:
         if (token[1] / tokens_num * 100) > 0.1:  # token[1] -> count of token
-            stopwords.append(token)
+            stopwords.append(token[0])
 
+    write_json("../data/stopwords.json", stopwords)
     write_file("../data/number_of_tokens.txt", str(tokens_num))
     return stopwords
 
