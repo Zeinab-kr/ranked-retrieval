@@ -3,12 +3,12 @@ from hazm import Normalizer
 
 def normalize_text(text):
     print("normalizing...")
-    contents = []
+    contents = {}
     normalizer = Normalizer()
     for i in text:
         temp = ""
         temp += str(text[i]['content'])  # read just contents of files
-        contents.append(normalizer.normalize(temp))
+        contents[i] = normalizer.normalize(temp)
 
     print("normalization done!")
     return contents
