@@ -10,6 +10,7 @@ def normalize_text(text):
         temp += str(text[i]['content'])  # read just contents of files
         contents[i] = normalizer.normalize(temp)
 
+    print("normalized:\n{}".format(contents["4092"]))
     print("normalization done!")
     return contents
 
