@@ -8,7 +8,7 @@ normalizer = Normalizer()
 lemmatizer = Lemmatizer()
 tokenizer = WordTokenizer()
 
-data = file.open_json("../data/IR_data_news_12k.json")
+data = file.open_json("../data/IR_data_news_5k 2.json")
 punctuations = tokenizer.tokenize(file.read_file("../data/punctuations.txt"))
 stopwords = file.open_json("../data/stopwords.json")
 
@@ -32,8 +32,9 @@ def process_query(query):
 
     query_vector = query_to_vector(query)
     similarity = cosine_value(query_vector, doc_vectors)
-    similar_docs = dict(heapq.nlargest(20, similarity.items(), key=lambda item: item[1]))
-    doc_links = [(doc_id, similar_docs[doc_id], data[str(doc_id)]["url"]) for doc_id in similar_docs]
+    similar_docs = dict(heapq.nlargest(1, similarity.items(), key=lambda item: item[1]))
+    doc_links = [(doc_id, similar_docs[doc_id], data[str(doc_id)]["content"]) for doc_id in similar_docs if
+                 str(doc_id) in data]
     return doc_links
 
 
@@ -59,13 +60,13 @@ def cosine_value(query_vector, doc_vectors):
                 dot_products[doc_id] += product
 
         for word in docs[doc_id]:
-            doc_vectors_size[doc_id] += docs[doc_id][word] * docs[doc_id][word]
+            doc_vectors_size[doc_id] += (docs[doc_id][word] * docs[doc_id][word])
 
     for doc_id in doc_vectors_size:
         doc_vectors_size[doc_id] = doc_vectors_size[doc_id] ** 0.5
 
     similarity = {}
     for doc_id in dot_products:
-        similarity[doc_id] = dot_products[doc_id] # / (doc_vectors_size[doc_id] * query_vector_size)
+        similarity[doc_id] = dot_products[doc_id] / (doc_vectors_size[doc_id] * query_vector_size)
 
     return similarity  # {doc_id: cosine_value}

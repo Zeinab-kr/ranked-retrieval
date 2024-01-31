@@ -1,9 +1,9 @@
 import heapq
 import time
+import sys
 
 from preprocess import file
 from token_class import Token
-import os
 
 
 def make_index():
@@ -69,6 +69,9 @@ def make_index():
                          "champion": champion,
                         "postings_list": tokens[counter-1].get_serializable_docs()})
 
+    temp = sorted(tokens, key=lambda x: len(x.docs))
+    for i in range(len(temp) - 4, len(temp) - 1):
+        print("word: {}, df: {}".format(temp[i].token, temp[i].df))
     print("made indexes!")
     end_time = time.time()
     print("time: {}".format(int(end_time - start_time)))

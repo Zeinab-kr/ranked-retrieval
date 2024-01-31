@@ -13,16 +13,18 @@ word_tokenizer = WordTokenizer(join_verb_parts=True, replace_emails=True,
 def preprocess():
     start_time = time.time()
     print("opening file...")
-    data = open_json("../data/IR_data_news_12k.json")
+    data = open_json("../data/IR_data_news_5k 2.json")
     print("file opened. Processing data...")
+
+    print()
 
     normalized_data = normalize_text(data)  # returns an array of strings
 
     # tokenizing
     print("tokenizing...")
     tokens = []  # (word, doc_id, posting)
-    for i, string in enumerate(normalized_data):
-        tokenized_string = word_tokenizer.tokenize(string)
+    for i in normalized_data:
+        tokenized_string = word_tokenizer.tokenize(normalized_data[i])
         for j, word in enumerate(tokenized_string):
             tokens.append((word, i, j))
 
@@ -45,8 +47,6 @@ def preprocess():
     write_json("../data/tokens.json", tokens)
     write_json("../data/tokens_with_count.json", count_tokens)
     write_file("../data/number_of_docs.txt", str(len(normalized_data)))
-
-
 
 
 def persian_sort_key(t):

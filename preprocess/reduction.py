@@ -1,4 +1,3 @@
-import os.path
 from collections import Counter
 from hazm import WordTokenizer
 from hazm import Stemmer

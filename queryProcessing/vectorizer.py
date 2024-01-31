@@ -12,6 +12,11 @@ def doc_to_vector(word):
     word_index = binary_search(word)
     if word_index == -1:
         return []
+
+    # champion = word_index["champion"]
+    # result = []
+    # for doc_id, weight in champion:
+    #     result.append(doc_id)
     df = word_index["df"]
     idf = math.log10(number_of_docs // df)
     docs = word_index["docs"]  # {"doc_id", "weight", "positions"}
@@ -30,7 +35,10 @@ def query_to_vector(query):
     with_count = sorted(with_count)
     result = []
     for word, count in with_count:
+        #word_index = binary_search(word)
+        #idf = math.log10(number_of_docs // word_index["df"])
         tf = 1 + math.log10(count)
+        #tf_idf = idf * tf
         result.append((word, tf))
 
     return result  # (word, tf)
