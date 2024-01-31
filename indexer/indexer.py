@@ -1,6 +1,5 @@
 import heapq
 import time
-import sys
 
 from preprocess import file
 from token_class import Token
