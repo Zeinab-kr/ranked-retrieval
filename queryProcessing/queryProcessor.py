@@ -33,7 +33,7 @@ def process_query(query):
     query_vector = query_to_vector(query)
     similarity = cosine_value(query_vector, doc_vectors)
     similar_docs = dict(heapq.nlargest(20, similarity.items(), key=lambda item: item[1]))
-    doc_links = [(doc_id, similar_docs[doc_id], data[str(doc_id)]["content"]) for doc_id in similar_docs if
+    doc_links = [(doc_id, similar_docs[doc_id], data[str(doc_id)]["url"]) for doc_id in similar_docs if
                  str(doc_id) in data]
     return doc_links
 
